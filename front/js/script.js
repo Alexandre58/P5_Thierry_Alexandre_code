@@ -26,55 +26,23 @@ const fetchPoduct =  async () => {
         alert("Merci de recharger la page, une erreur est survenue !");
     })
 };
-/*const productDisplay = async () => {
-    await fetchPoduct();
-    let list = sectionItems[0];
-    sectionItems.innerHTML =
-              `  
-                 <a href="/front/html/product.html?id=${list._id}">
-                    <article>
-                        <img src= "${list.imageUrl}" alt="${list.altTxt}">
-                        <h3 class="productName">${list.name}</h3>
-                        <p class="productDescription">${list.description}</p>
-                    </article>
-                </a>
-              `
-
-    ;
-}
-    productDisplay(); */
-
- 
 //affichage des elements
-
-
 const productDisplay = async () => {
     await fetchPoduct();
+
+
     sectionItems.innerHTML = productsListe.map((list)=>  
               `  
                  <a href="/front/html/product.html?id=${list._id}">
                     <article>
-                        <img src= "${list.imageUrl}" alt="${list.altTxt}">
+                        <img src="${list.imageUrl}" alt="Lorem ipsum dolor sit amet, Kanap name1" width="160" height="160">
                         <h3 class="productName">${list.name}</h3>
                         <p class="productDescription">${list.description}</p>
                     </article>
                 </a>
               `
 
-    );
-
-    sectionItems.innerHTML = productsListe.map((list)=>  
-              `  
-                 <a href="/front/html/product.html?id=${list._id}">
-                    <article>
-                        <img src= "${list.imageUrl}" alt="${list.altTxt}">
-                        <h3 class="productName">${list.name}</h3>
-                        <p class="productDescription">${list.description}</p>
-                    </article>
-                </a>
-              `
-
-    );
+    ).join("");
 };
 
 productDisplay();   
