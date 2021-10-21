@@ -35,7 +35,7 @@ const productDisplay = async () => {
               `  
                  <a href="/front/html/product.html?id=${list._id}">
                     <article>
-                        <img src="${list.imageUrl}" alt="Lorem ipsum dolor sit amet, Kanap name1" width="160" height="160">
+                        <img src="${list.imageUrl}" alt="${list.altTxt}" width="160" height="160">
                         <h3 class="productName">${list.name}</h3>
                         <p class="productDescription">${list.description}</p>
                     </article>

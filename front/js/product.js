@@ -36,49 +36,18 @@ const fetchPoductArticles = async () => {
 };
 
 //affichage des elements
+/*var newImg = document.createElement("img");*/
 const productDisplayArticles = async () => {
     console.log("yes");
     await fetchPoductArticles();
     console.log(productsListeArticles.description );
     console.log(productsListeArticles.name);
     console.log(productsListeArticles.price);
-
-     /* ` <h1 id="idTitle">${productsListeArticles.name}</h1>  `*/
-
-        idTitle.textContent =   ` ${productsListeArticles.name} `;
-                    idPrice.textContent =   ` ${productsListeArticles.price} `;
-                    idDescription.textContent =   ` ${productsListeArticles.description} `;
+                   /*  itemImg. `<img src="${list.imageUrl}" alt="${list.altTxt}" width="160" height="160"></img> `;*/
+                     idTitle.textContent = ` ${productsListeArticles.name} `;
+                     idPrice.textContent = ` ${productsListeArticles.price} `;
+                     idDescription.textContent = ` ${productsListeArticles.description} `;
 };
 productDisplayArticles();
 
-//autre façon de faire
-/*
-(async function(){
-      const idArticle = getArticleId()
-      const list = await getArticle(idArticle)
-      articleSeul(list);
-      console.log(idArticle);
-      console.log(list);
-})()
-function getArticleId() {
-    return new URL(location.href).searchParams.get("id")
-    
-}
-function getArticle(articleId){
-    return fetch("http://localhost:3000/api/products/${list._id}")
-       .then(function(response){
-           return response.json()
-       })
-       .then(function(articles){
-           return articles
-       })
-       .catch(function(error){
-           alert("Merci de recharger la page, une erreur est survenue !")
-       })
 
-}
-function articleSeul(list) {
-         idTitle.textContent = list.name;
-         console.log(list);
-}
-*/
