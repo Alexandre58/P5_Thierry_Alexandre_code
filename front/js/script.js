@@ -9,10 +9,10 @@ const productDescription = document.querySelector(".productDescription");
 
 
 /**
- * Api
+ *tab productsList with call all api
  *  
  */
-//list product in tab productsListe
+//list product in tab productsList for all elements 
 let productsListe =[];
 
 const fetchPoduct =  async () => {
@@ -26,12 +26,12 @@ const fetchPoduct =  async () => {
         alert("Merci de recharger la page, une erreur est survenue !");
     })
 };
-//affichage des elements
-const productDisplay = async () => {
+//affichage elements with a function anonymous
+( async () => {
     await fetchPoduct();
-
-
-    sectionItems.innerHTML = productsListe.map((list)=>  
+    //display articles page accueil
+    sectionItems.innerHTML = productsListe.map((list)=> 
+    //href du produit choisis qui renvoi vers la page product.html 
               `  
                  <a href="/front/html/product.html?id=${list._id}">
                     <article>
@@ -43,12 +43,10 @@ const productDisplay = async () => {
               `
 
     ).join("");
-};
+})();
 
-productDisplay();   
-/* pour memoire <img src="${list.imageUrl}" alt="${list.altTxt}">ligne a remettre dans les articles*/
-/* pour memoire <img src="${"/back/images/kanap01.jpeg"}" alt="Lorem ipsum dolor sit amet, Kanap name1" width="160" height="160">
-*/ 
+   
+//END DISPLAY FOR ACCUEIL
 
 
 
