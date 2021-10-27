@@ -4,8 +4,29 @@ const idDescription = document.getElementById("description");
 const idPrice = document.getElementById("price");
 const idColors = document.getElementById("colors"); //choix colors dasn le <select> <option>
 const addToCartBtn = document.getElementById("addToCart");//btn d'envoi vers cart.html(panier)
+class Kanap {
+  constructor(name,image,description,altTxt,price,id , color){
+      this.name = name ;
+      this.image = image;
+      this.description = description;
+      this.altTxt = altTxt;
+      this.price = price;
+      this.id = id;
+      this.color = color;
+
+  }
+};
+
+
+
+
+
 
 // recuperation de l'url produit cliqué par l'utilisateur a partir de la page d'acceuil 
+/**
+ * 
+ * @returns string
+ */
 const verifIsAGoodUrl =()=> {
     // page actuel http 
     let url = new URL(window.location.href);
@@ -16,38 +37,42 @@ const verifIsAGoodUrl =()=> {
     console.log(idUrlRecup);
     if (idUrlRecup.has("id")) {
         let  returnId = idUrlRecup.get("id");
-                                                                  console.log(returnId);
+                                                                  console.log(typeof returnId);
       return returnId;
     } else {
         //message d'erreur si soucis d'affichage 
         console.log("Cette adresse ne correspond pas a la page demandée");
     }
   }
-
   // obtenir et verif la reponse "" information du produit de la page affichée dans une function ""
-const getInfoByIdAPI = async()=> {
-    let id = verifIsAGoodUrl();
-    try {
-      let response = await fetch(`http://localhost:3000/api/products/${id}`);
-                                                                             console.log(response);
-      return await response.json(); 
-      
-    } catch (error) {
-      console.log("Erreur  : " + error);
-    }
-  }
-  
+
+let productsListe =[];
+
+const fetchPoduct =  async () => {
+  let id = verifIsAGoodUrl();
+ await fetch(`http://localhost:3000/api/products/${id}`)
+    .then((res)=>res.json())
+    .then((data)=> {
+       productsListe = data;
+    console.log(productsListe);
+    })
+    .catch((error)=>{
+        alert("Merci de recharger la page, une erreur est survenue !");
+    })
+};
+fetchPoduct();
+  console.log(productsListe);
   // Faire le rendu dans la page product.html
  (async () => {
       //valueOfId retourne les produit de l'api de la page affichée
-    let valueOfId = await getInfoByIdAPI();
-                                                                                  console.log(valueOfId);
-    classItem__img.innerHTML += `<img src="${valueOfId.imageUrl}" alt="${valueOfId.altTxt}">`;
-    idTittle.innerHTML += valueOfId.name;
-    idPrice.innerHTML += valueOfId.price;
-    idDescription.innerHTML += valueOfId.description;
+    let valueOfId = await fetchPoduct();
+                                                                                  console.log(productsListe);
+    classItem__img.innerHTML += `<img src="${productsListe.imageUrl}" alt="${productsListe.altTxt}">`;
+    idTittle.innerHTML += productsListe.name;
+    idPrice.innerHTML += productsListe.price;
+    idDescription.innerHTML += productsListe.description;
     // boucle sur les chois de couleurs dans le select option
-    valueOfId.colors.forEach((color) => {  
+    productsListe.colors.forEach((color) => {  
       idColors.innerHTML += `<option value="${color}">${color}</option>`;
                                                                               console.log(idColors);
     });
@@ -79,4 +104,5 @@ const getInfoByIdAPI = async()=> {
    
     }
   });
+ 
   

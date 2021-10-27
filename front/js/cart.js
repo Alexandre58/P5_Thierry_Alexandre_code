@@ -2,7 +2,7 @@ const idSectionContainercartHtml = document.getElementById("cart__items");
 
 
 
-//recupération 
+//recupération api de la page affichée
 const recupInfoIdProduct = async (key)=> {
 	let keyCorlors = localStorage.key(key);
 	                                                      console.log(keyCorlors);
