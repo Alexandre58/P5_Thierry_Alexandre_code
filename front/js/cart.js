@@ -50,4 +50,60 @@ const recupInfoIdProduct = async (key)=> {
 })();
 
 
+/*******CODE A VERIFIER ET TROUVER CE FOUTU NUMERO DE COMMANDE  */
+function productToSend() {
+	let userBasket = [];
+	for (let i = 0; i < localStorage.length; i++) {
+		let idColor = localStorage.key(i);
+		let idColorArray = idColor.split(",");
+		let id = idColorArray[0];
+		userBasket.push(id);
+	}
+	return userBasket;
+}
+
+let userFormSubmit = document.getElementById("order");
+                                                   
+userFormSubmit.addEventListener("click", (e) => {
+	e.preventDefault();
+	if (userInputVerification()) {
+		const products = productToSend();
+		const toSend = {
+			contact: {
+				firstName: firstName.value,
+				lastName: lastName.value,
+				address: address.value,
+				city: city.value,
+				email: email.value,
+			},
+			products,
+		};
+		
+		fetch("http://localhost:3000/api/products/order", {
+			method: "POST",
+			headers: {
+				Accept: "application/json",
+				"Content-Type": "application/json",
+			},
+			body: JSON.stringify(toSend),
+		})
+	
+			.then((response) => response.json())
+			.then((value) => {
+			//	localStorage.clear();
+				document.location.href = `./confirmation.html?id=${value.orderId}`;
+			})
+			.catch((error) => {
+				console.log("Error: " + error);
+			});
+	}
+	
+});
+
+
+
+
+
+
+
 
