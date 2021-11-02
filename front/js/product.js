@@ -4,7 +4,6 @@ const idDescription = document.getElementById('description');
 const idPrice = document.getElementById('price');
 const idColors = document.getElementById('colors'); //choix colors dasn le <select> <option>
 const addToCartBtn = document.getElementById('addToCart'); //btn d'envoi vers cart.html(panier)
-// get l'url product click button page acceuil
 /**
  *
  * @returns string
