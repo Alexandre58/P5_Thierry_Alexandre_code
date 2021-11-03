@@ -8,6 +8,7 @@ export function checkIfCartEmpty() {
             "<p >Il n'y a pas encore de Kanap ici, visitez <a href='./index.html' style=' color:white; font-weight:700'>notre séléction 🛋️</a>.</p>";
     }
 }
+
 //class for validation form
 export class Form {
     constructor() {
