@@ -10,7 +10,7 @@ export function checkIfCartEmpty() {
 }
 
 //class for validation form
-export class Form {
+class Form {
     constructor() {
         this.firstName = document.getElementById('firstName').value;
         this.lastName = document.getElementById('lastName').value;
