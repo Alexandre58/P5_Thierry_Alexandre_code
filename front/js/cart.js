@@ -4,7 +4,6 @@ import {
     idSendConfirm,
 } from './function.js';
 
-
 //La méthode split() divise une chaîne en un tableau de sous-chaînes et renvoie le tableau.Permet de séparer les données
 
 /*La fonction suivante parcourt chaque clé présente dans le localStorage et affiche les valeurs correspondantes.
@@ -39,7 +38,33 @@ const idSectionContainercartHtml = document.querySelector('#cart__items');
 const userFormSubmit = document.getElementById('order');
 let totalPriceDisplay = document.getElementById('totalPrice');
 const totalQuantityDisplay = document.getElementById('totalQuantity');
+/**
+ * delete article panier class="deleteItem" (supprimer) ligne 66 cart.html
+ */
+const deleteArticleNbr = () => {
+    let deleteProducListBtn = document.querySelectorAll('.deleteItem');
+    for (let i = 0; i < deleteProducListBtn.length; i++) {
+        deleteProducListBtn[i].addEventListener('click', (e) => {
+            e.preventDefault();
+            //select parent for close
+            let articleDOM = deleteProducListBtn[i].closest('article');
+            console.log(articleDOM);
+            let itemId = articleDOM.dataset.id;
+            console.log(itemId);
+            //reucp données
+            let itemColor = articleDOM.dataset.color;
+            let itemQuantity = localStorage.getItem(localStorage.key(i));
+            console.log(itemQuantity);
+            let localStorageKey = [itemId, itemColor];
+            //delete localstorage itemId , itemColor,itemQuantity
+            localStorage.removeItem(localStorageKey, itemQuantity);
+            articleDOM.remove();
 
+            //display html (class ="itemQuantity" )
+            displayNumberTotalPanier();
+        });
+    }
+};
 /**
  * return key without color
  * @param {*} key
@@ -50,19 +75,96 @@ const recupInfoIdProduct = async (key) => {
     console.log(keyCorlors);
     //idColorArray return key/color on tab with two element 0 = key 1 ,(.split)= color
     let idColorArray = keyCorlors.split(',');
-                                              console.log(idColorArray);
+    console.log(idColorArray);
     //recup one value on the table [id]
     let itemId = idColorArray[0];
-                                              console.log(itemId);
+    console.log(itemId);
     try {
         let response = await fetch(
             `http://localhost:3000/api/products/${itemId}`
         );
-                                              console.log(typeof response);
+        console.log(typeof response);
         return await response.json();
     } catch (error) {
-                                              console.log('Error : ' + error);
+        console.log('Error : ' + error);
     }
+};
+/**ligne 63 cart.html
+ * input number Quantity(class ="itemQuantity" ) possibility addition and send in localStorage
+ * ?number == 0 message error : send localstorage
+ */
+const refreshAndSendTheNumber = () => {
+    let quantitySelector = document.querySelectorAll('.itemQuantity');
+    for (let i = 0; i < quantitySelector.length; i++) {
+        quantitySelector[i].addEventListener('change', (e) => {
+            e.preventDefault();
+            //return Ancestor value
+            let articleDOM = quantitySelector[i].closest('article');
+            //return id data
+            let itemId = articleDOM.dataset.id;
+            console.log(itemId);
+            //return choise color data
+            let itemColor = articleDOM.dataset.color;
+            console.log(itemColor);
+            //return chooise id and colors localStorage
+            let localStorageKey = [itemId, itemColor];
+            //recup event change addeventListener
+            let itemQuantity = e.target.value;
+            console.log(itemQuantity);
+            if (itemQuantity == 0) {
+                alert(
+                    'Il devrait y avoir au moins un Kanapé dans la commande ! Merci de refaire un choix'
+                );
+            }
+            //send in localStorage Key and Number
+            localStorage.setItem(localStorageKey, itemQuantity);
+            displayNumberTotalPanier();
+        });
+    }
+};
+/**
+ * return the number of Kanap chosen
+ * display html (class ="itemQuantity" ligne 63)
+ * return {number}
+ */
+const displayNumberTotalPanier = () => {
+    let quantitySelector = document.querySelectorAll('.itemQuantity');
+    let itemAmount = 0;
+    for (let i = 0; i < quantitySelector.length; i++) {
+        //return entier
+        itemAmount += parseInt(quantitySelector[i].value);
+        console.log(itemAmount);
+    }
+    //ligne 73 cart.html display total (number) articles
+
+    totalQuantityDisplay.innerHTML = itemAmount;
+    console.log(typeof itemAmount);
+    //Display Total addition price panier(id='totalPrice) when we add several sofas
+    displayTotalPrice();
+    //if localStorage empty ,return accueil
+    checkIfCartEmpty();
+};
+/**
+ * Display Total price panier(id='totalPrice ligne 73) when we add several sofas
+ */
+const displayTotalPrice = () => {
+    let quantitySelector = document.querySelectorAll('.itemQuantity');
+    let totalCartPrice = 0;
+    for (let i = 0; i < quantitySelector.length; i++) {
+        //quantitySelector[i] ={objet}
+        let articleDOM = quantitySelector[i].closest('article');
+        console.log(typeof quantitySelector);
+        console.log(articleDOM);
+        //recup individual price
+        let individualPrice = articleDOM.dataset.price;
+        console.log(individualPrice);
+        //multiply quantity * individual Article
+        totalCartPrice += parseInt(quantitySelector[i].value) * individualPrice;
+        console.log(typeof quantitySelector);
+    }
+
+    totalPriceDisplay.innerHTML = totalCartPrice;
+    console.log(totalCartPrice);
 };
 
 /**
@@ -72,7 +174,7 @@ const recupInfoIdProduct = async (key) => {
     //return all commande on panier.html
     for (let key = 0; key < localStorage.length; key++) {
         //awwait response key
-        //productList = key 
+        //productList = key
         let productList = await recupInfoIdProduct(key);
         console.log(productList);
         //display and
@@ -113,110 +215,7 @@ const recupInfoIdProduct = async (key) => {
     //Display Total addition price panier(id='totalPrice) when we add several sofas
     displayTotalPrice();
 })();
-/**
- * delete article panier class="deleteItem" (supprimer) ligne 66 cart.html
- */
-const deleteArticleNbr =()=> {
-    let deleteProducListBtn = document.querySelectorAll('.deleteItem');
-    for (let i = 0; i < deleteProducListBtn.length; i++) {
-        deleteProducListBtn[i].addEventListener('click', (e) => {
-            e.preventDefault();
-            //select parent for close
-            let articleDOM = deleteProducListBtn[i].closest('article');
-                                                                        console.log(articleDOM);
-            let itemId = articleDOM.dataset.id;
-                                                                         console.log(itemId);
-                                                                         //reucp données
-            let itemColor = articleDOM.dataset.color;
-            let itemQuantity = localStorage.getItem(localStorage.key(i));
-                                                                         console.log(itemQuantity);
-            let localStorageKey = [itemId, itemColor];
-            //delete localstorage itemId , itemColor,itemQuantity
-            localStorage.removeItem(localStorageKey, itemQuantity);
-            articleDOM.remove();
 
-            //display html (class ="itemQuantity" )
-            displayNumberTotalPanier();
-        });
-    }
-}
-/**ligne 63 cart.html
- * input number Quantity(class ="itemQuantity" ) possibility addition and send in localStorage
- * ?number == 0 message error : send localstorage
- */
-const refreshAndSendTheNumber =()=> {
-    let quantitySelector = document.querySelectorAll('.itemQuantity');
-    for (let i = 0; i < quantitySelector.length; i++) {
-        quantitySelector[i].addEventListener('change', (e) => {
-            e.preventDefault();
-            //return Ancestor value
-            let articleDOM = quantitySelector[i].closest('article');
-            //return id data
-            let itemId = articleDOM.dataset.id;
-                                                        console.log(itemId);
-            //return choise color data
-            let itemColor = articleDOM.dataset.color;
-                                                       console.log(itemColor);
-            //return chooise id and colors localStorage
-            let localStorageKey = [itemId, itemColor];
-            //recup event change addeventListener
-            let itemQuantity = e.target.value;
-                                                      console.log(itemQuantity);
-            if (itemQuantity == 0) {
-                alert(
-                    'Il devrait y avoir au moins un Kanapé dans la commande ! Merci de refaire un choix'
-                );
-            }
-            //send in localStorage Key and Number
-            localStorage.setItem(localStorageKey, itemQuantity);
-            displayNumberTotalPanier();
-        });
-    }
-}
-/**
- * return the number of Kanap chosen
- * display html (class ="itemQuantity" ligne 63)
- * return {number} 
- */
-const displayNumberTotalPanier =()=> {
-    let quantitySelector = document.querySelectorAll('.itemQuantity');
-    let itemAmount = 0;
-    for (let i = 0; i < quantitySelector.length; i++) {
-        //return entier
-        itemAmount += parseInt(quantitySelector[i].value);
-                                                                       console.log(itemAmount);
-    }
-    //ligne 73 cart.html display total (number) articles 
-   
-    totalQuantityDisplay.innerHTML = itemAmount;
-                                                                        console.log(typeof itemAmount);
-    //Display Total addition price panier(id='totalPrice) when we add several sofas
-    displayTotalPrice();
-    //if localStorage empty ,return accueil
-    checkIfCartEmpty();
-}
-/**
- * Display Total price panier(id='totalPrice ligne 73) when we add several sofas
- */
-const displayTotalPrice =()=> {
-    let quantitySelector = document.querySelectorAll('.itemQuantity');
-    let totalCartPrice = 0;
-    for (let i = 0; i < quantitySelector.length; i++) {
-        //quantitySelector[i] ={objet}
-        let articleDOM = quantitySelector[i].closest('article');
-                                                             console.log(typeof quantitySelector);
-                                                             console.log(articleDOM);
-        //recup individual price
-        let individualPrice = articleDOM.dataset.price;
-                                                             console.log(individualPrice);
-        //multiply quantity * individual Article  transform with parseInt
-        totalCartPrice += parseInt(quantitySelector[i].value) * individualPrice;
-                                                             console.log(typeof quantitySelector);
-    }
-    
-    totalPriceDisplay.innerHTML = totalCartPrice;
-                                                   console.log(totalCartPrice);
-}
 /**
  * Validationn form (watch file function.js)
  */
@@ -231,7 +230,7 @@ userFormSubmit.addEventListener('click', (e) => {
     //if input form is true send POST id localstorage
     if (userInputVerification()) {
         const products = idSendConfirm();
-    
+
         const toSend = {
             contact: {
                 firstName: firstName.value,
