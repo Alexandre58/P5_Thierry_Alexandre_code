@@ -1,84 +1,69 @@
-const item = document.querySelector(".item"); //container section container article
-const itemImg = document.querySelector(".item__img"); //img product
-const idTitle = document.querySelector("#title"); //h1 title
-const idPrice = document.querySelector("#price"); //price p
-const idDescription = document.querySelector("#description"); //description
-const idColors = document.querySelector("#colors"); //select colors name color-select
-const idQuantity = document.querySelector("#quantity"); //input quantity
-const idAddToCart = document.querySelector("#addToCart"); //button add to cart typt number
-//end container article
-console.log(item);
-console.log(itemImg);
-console.log(idTitle);
-console.log(idPrice);
-console.log(idDescription);
-console.log(idColors);
-console.log(idQuantity);
-console.log(idAddToCart);
-//recup de l'url de la page chargéé
-console.log(window.location.href);
-console.log(window.location);
-//list product in tab productsListe
-var newUrl = new URL(location.href).searchParams.get("id");
-console.log(newUrl);
-let productsListeArticles = [];
-const fetchPoductArticles = async () => {
+import {Kanap} from "./kanap.js";
+const classItem__img = document.querySelector('.item__img');
+const idTittle = document.querySelector('#title');
+const idDescription = document.getElementById('description');
+const idPrice = document.getElementById('price');
+const idColors = document.getElementById('colors'); //choix colors dasn le <select> <option>
+const addToCartBtn = document.getElementById('addToCart'); //btn d'envoi vers cart.html(panier)
 
-    await fetch(`http://localhost:3000/api/products/${newUrl}`)
-        .then((res) => res.json())
-        .then((data) => {
-            productsListeArticles = data;
-            console.log(productsListeArticles);
-        })
-        .catch((error) => {
-            alert("Merci de recharger la page, une erreur est survenue !");
-        });
+
+/**
+ *
+ * @returns string
+ */
+const verifIsAGoodUrl = () => {
+    // page actuel http
+    let url = new URL(window.location.href);
+    //acces aux arguments decodé de la requete get dans l'url
+    let idUrlRecup = new URLSearchParams(url.search);
+    //verif si la clé id est presente avec la methode .has() qui renvoi un boolean
+    //if key = true return returnId else error
+    if (idUrlRecup.has('id')) {
+        let returnId = idUrlRecup.get('id');
+        return returnId;
+    } else {
+        //message d'erreur si soucis d'affichage
+        console.log('Cette adresse ne correspond pas a la page demandée');
+    }
 };
+/**
+ *  get et verif the response "information product display page"
+ */
+    let id = verifIsAGoodUrl();
+    fetch(`http://localhost:3000/api/products/${id}`)
+            .then(data => data.json())
+            .then(jsonListArticle => {
+                        let kanapUnity = new Kanap(jsonListArticle)
+                           //Display product.html
+                           classItem__img.innerHTML = `<img src="${kanapUnity.imageUrl}" alt="${kanapUnity.alt}">`;
+                           idTittle.textContent = kanapUnity.name;
+                           idPrice.textContent = kanapUnity.price;
+                           idDescription.textContent = kanapUnity.description;
+            
+                            //display choise colors
+                            kanapUnity.colors.forEach((color) => {
+                                idColors.innerHTML += `<option value="${color}">${color}</option>`;
+                                console.log(color);
+                            });
+                                        
+    });
 
-//affichage des elements
-const productDisplayArticles = async () => {
-    console.log("yes");
-    await fetchPoductArticles();
-    console.log(productsListeArticles.description );
-    console.log(productsListeArticles.name);
-    console.log(productsListeArticles.price);
-
-     /* ` <h1 id="idTitle">${productsListeArticles.name}</h1>  `*/
-
-        idTitle.textContent =   ` ${productsListeArticles.name} `;
-                    idPrice.textContent =   ` ${productsListeArticles.price} `;
-                    idDescription.textContent =   ` ${productsListeArticles.description} `;
-};
-productDisplayArticles();
-
-//autre façon de faire
-/*
-(async function(){
-      const idArticle = getArticleId()
-      const list = await getArticle(idArticle)
-      articleSeul(list);
-      console.log(idArticle);
-      console.log(list);
-})()
-function getArticleId() {
-    return new URL(location.href).searchParams.get("id")
-    
-}
-function getArticle(articleId){
-    return fetch("http://localhost:3000/api/products/${list._id}")
-       .then(function(response){
-           return response.json()
-       })
-       .then(function(articles){
-           return articles
-       })
-       .catch(function(error){
-           alert("Merci de recharger la page, une erreur est survenue !")
-       })
-
-}
-function articleSeul(list) {
-         idTitle.textContent = list.name;
-         console.log(list);
-}
-*/
+// Add LocalStorage to card
+addToCartBtn.addEventListener('click', () => {
+    const itemId = verifIsAGoodUrl();
+    const itemColor = document.getElementById('colors').value;
+    const itemQuantity = document.getElementById('quantity').value;
+    // Confirm color and quantity != 0
+    if (itemColor === '') {
+        alert('Il est nécessaire de choisir une couleur');
+    } else if (itemQuantity == 0) {
+        alert('Il faut au moins ajouter un Kanap');
+    } else {
+        //table return clé/couleur
+        const itemInCart = [itemId, itemColor];
+        //return localStorage (clé/couleur together + value = quantité)
+        localStorage.setItem(itemInCart, itemQuantity);
+        //window.location.href return to cart.html(panier)
+        window.location.href = "./cart.html";
+    }
+});
