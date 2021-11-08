@@ -65,12 +65,5 @@ addToCartBtn.addEventListener('click', () => {
         localStorage.setItem(itemInCart, itemQuantity);
         //window.location.href return to cart.html(panier)
         window.location.href = "./cart.html";
-        console.log(itemId);
-        console.log(itemColor);
-        console.log(itemInCart);
-        console.log(itemInCart[0]);
-        console.log(itemInCart[1]);
-        console.log(localStorage);
-        console.log(localStorage.key);
     }
 });
