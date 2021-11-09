@@ -4,25 +4,18 @@
  */
 // Getting the order Id with the URL
 function idRecuperation() {
-	let url = new URL(window.location.href);
-                                                     	console.log(url );
-	let searchParams = new URLSearchParams(url.search);
-	//Code d'essai a ne pas garder
-														console.log(searchParams);
-														let toStringLog = searchParams.toString();
-														console.log(toStringLog);
-    //FIN Code d'essai a ne pas garder
-	//?id existe return id : error
-	if (searchParams.has("id")) {
-		let id = searchParams.get("id");
-	                                                 	console.log(id);
-		return id;
-	} else {
-		console.log("Error, no order Id found");
-	}
+    let url = new URL(window.location.href);
+    let searchParams = new URLSearchParams(url.search);
+    //?id existe return id : error
+    if (searchParams.has('id')) {
+        let id = searchParams.get('id');
+        return id;
+    } else {
+        alert('Error, no order Id found');
+    }
 }
 //display (await load and display n°order)
-window.addEventListener("load", () => {
-	const orderId = document.getElementById("orderId");
-	orderId.innerText = idRecuperation();
+window.addEventListener('load', () => {
+    const orderId = document.getElementById('orderId');
+    orderId.innerText = idRecuperation();
 });

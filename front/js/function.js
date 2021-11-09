@@ -108,7 +108,5 @@ export function idSendConfirm() {
         let id = idColorArray[0];
         idRecupLocalStorage.push(id);
     }
-    console.log(idRecupLocalStorage);
-
     return idRecupLocalStorage;
 }

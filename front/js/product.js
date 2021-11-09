@@ -23,30 +23,27 @@ const verifIsAGoodUrl = () => {
         return returnId;
     } else {
         //message d'erreur si soucis d'affichage
-        console.log('Cette adresse ne correspond pas a la page demandée');
+        alert('Cette adresse ne correspond pas a la page demandée');
     }
 };
 /**
  *  get et verif the response "information product display page"
  */
-    let id = verifIsAGoodUrl();
-    fetch(`http://localhost:3000/api/products/${id}`)
-            .then(data => data.json())
-            .then(jsonListArticle => {
-                        let kanapUnity = new Kanap(jsonListArticle)
-                           //Display product.html
-                           classItem__img.innerHTML = `<img src="${kanapUnity.imageUrl}" alt="${kanapUnity.alt}">`;
-                           idTittle.textContent = kanapUnity.name;
-                           idPrice.textContent = kanapUnity.price;
-                           idDescription.textContent = kanapUnity.description;
-            
-                            //display choise colors
-                            kanapUnity.colors.forEach((color) => {
-                                idColors.innerHTML += `<option value="${color}">${color}</option>`;
-                                console.log(color);
-                            });
-                                        
-    });
+let id = verifIsAGoodUrl();
+fetch(`http://localhost:3000/api/products/${id}`)
+        .then(data => data.json())
+        .then(jsonListArticle => {
+                    let kanapUnity = new Kanap(jsonListArticle)
+                        //Display product.html
+                        classItem__img.innerHTML = `<img src="${kanapUnity.imageUrl}" alt="${kanapUnity.alt}">`;
+                        idTittle.textContent = kanapUnity.name;
+                        idPrice.textContent = kanapUnity.price;
+                        idDescription.textContent = kanapUnity.description;
+                        //display choise colors
+                        kanapUnity.colors.forEach((color) => {
+                            idColors.innerHTML += `<option value="${color}">${color}</option>`;
+                        });                    
+});
 
 // Add LocalStorage to card
 addToCartBtn.addEventListener('click', () => {
