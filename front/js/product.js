@@ -1,4 +1,4 @@
-import {Kanap} from "./kanap.js";
+import {Kanap} from "./Modelkanap.js";
 const classItem__img = document.querySelector('.item__img');
 const idTittle = document.querySelector('#title');
 const idDescription = document.getElementById('description');

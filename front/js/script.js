@@ -1,4 +1,4 @@
-import {Kanap} from "./kanap.js";
+import {Kanap} from "./Modelkanap.js";
 
 //const urlApiAllkanaps ="http://localhost:3000/api/products";
 //console.log(urlApiAllkanaps);

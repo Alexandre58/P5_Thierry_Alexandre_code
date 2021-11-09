@@ -38,8 +38,8 @@ const idSectionContainercartHtml = document.querySelector('#cart__items');
 const userFormSubmit = document.getElementById('order');
 let totalPriceDisplay = document.getElementById('totalPrice');
 const totalQuantityDisplay = document.getElementById('totalQuantity');
-
-/**
+let totalCartPrice = 0;
+/*
  * return key without color
  * @param {*} key
  * @returns {object}
@@ -137,7 +137,7 @@ const displayNumberTotalPanier = () => {
  */
 const displayTotalPrice = () => {
     let quantitySelector = document.querySelectorAll('.itemQuantity');
-    let totalCartPrice = 0;
+    totalCartPrice = 0;
     for (let i = 0; i < quantitySelector.length; i++) {
         //quantitySelector[i] ={objet}
         let articleDOM = quantitySelector[i].closest('article');
@@ -148,6 +148,7 @@ const displayTotalPrice = () => {
     }
     totalPriceDisplay.innerHTML = totalCartPrice;
 };
+
 /**
  * display list productList on panier
  */
@@ -207,7 +208,7 @@ userInputVerification();
 userFormSubmit.addEventListener('click', (e) => {
     e.preventDefault();
     //if input form is true send POST id localstorage
-    if (userInputVerification()) {
+    if (userInputVerification() && totalCartPrice !== 0 ) {
         const products = idSendConfirm();
         const toSend = {
             contact: {
@@ -237,5 +238,10 @@ userFormSubmit.addEventListener('click', (e) => {
             .catch((error) => {
                 alert('Error: ' + error);
             });
+    }else {
+         let title = document.querySelector("#cartAndFormContainer");
+         console.log(title);
+         title.innerHTML = `<h2>Oupss: Votre panier est vide ou le formulaire n'est pas correctement rempli.</h2>
+                              <h3>(Merci de faire un retour au pannier)</h3>`;
     }
 });
