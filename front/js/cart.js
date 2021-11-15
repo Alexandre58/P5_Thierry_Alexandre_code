@@ -1,43 +1,11 @@
-import {
-    checkIfCartEmpty,
-    userInputVerification,
-    idSendConfirm,
-} from './function.js';
 
-//La méthode split() divise une chaîne en un tableau de sous-chaînes et renvoie le tableau.Permet de séparer les données
+import {checkIfCartEmpty, idSendConfirm} from './function.js';
+import {userInputVerification} from './formulaire.js';
 
-/*La fonction suivante parcourt chaque clé présente dans le localStorage et affiche les valeurs correspondantes.
-for (var i = 0; i < localStorage.length; i++) {
-   alert(localStorage.getItem(localStorage.key(i)));
-}*/
-/**.closest 
- * La méthode la plus proche () en JavaScript est utilisée pour récupérer l'ancêtre le plus proche, ou le parent de l'élément correspond aux sélecteurs. Si aucun ancêtre n'est trouvé, la méthode renvoie null .
-
-   Cette méthode parcourt l'élément et ses parents dans l'arborescence du document, et le parcours se poursuit jusqu'à ce que le premier nœud correspondant à la chaîne de sélection fournie soit trouvé.
- */
-/**.dataset.************
- *  L'objet au format JSON dataset est accessible en écriture : modifier cet objet a un effet automatique et immédiat sur le DOM.
-
-Pour rappel les attributs commençant par data- permettent de stocker des informations texte sur chaque élément du DOM.
-Même si l'attribut n'existe pas dans la norme HTML W3C, aucune erreur n'est reportée lors de l'exercice de validation de code.
- */
-/**.removeItem*****************
- * La méthode removeItem()de l'interface Storage, lorsque vous passez une clé en argument, va supprimer la ressource avec le nom de la clé correspondante du stockage. L'interface Storagede l'API Web Storage API fournit des accès particuliers dans les domaines des stockages locaux et des sessions.
-
-   Si aucun élément n'est donné en paramètre nomCle, cette méthode ne fait rien.
- */
-/**addeventListenner('change',.. **************.L'événement change est déclenché pour les éléments <input> (entrée), <select> (sélection) et <textarea> (zone de texte) lorsqu'un changement de leur valeur est réalisé par l'utilisateur.
- * Propagation	Oui
- */
-/**
- * La fonction parseInt() *******************analyse une chaîne de caractère fournie en argument et renvoie un entier exprimé dans une base donnée.
- */
-//. remove()****** La Element.remove()méthode supprime l'élément de l'arbre auquel il appartient.
-//*****La méthode JSON.stringify()***** convertit une valeur JavaScript en chaîne JSON. Optionnellement, elle peut remplacer des valeurs ou spécifier les propriétés à inclure si un tableau de propriétés a été fourni.
-const idSectionContainercartHtml = document.querySelector('#cart__items');
-const userFormSubmit = document.getElementById('order');
-let totalPriceDisplay = document.getElementById('totalPrice');
-const totalQuantityDisplay = document.getElementById('totalQuantity');
+const idSectionContainercartHtml = document.querySelector("#cart__items");
+const userFormSubmit = document.getElementById("order");
+let totalPriceDisplay = document.getElementById("totalPrice");
+const totalQuantityDisplay = document.getElementById("totalQuantity");
 let totalCartPrice = 0;
 /*
  * return key without color
@@ -63,22 +31,25 @@ const recupInfoIdProduct = async (key) => {
  * delete article panier class="deleteItem" (supprimer) ligne 66 cart.html
  */
 const deleteArticleNbr = () => {
-    let deleteProducListBtn = document.querySelectorAll('.deleteItem');
+    let deleteProducListBtn = document.querySelectorAll(".deleteItem");
     for (let i = 0; i < deleteProducListBtn.length; i++) {
         deleteProducListBtn[i].addEventListener('click', (e) => {
             e.preventDefault();
             //select parent for close
-            let articleDOM = deleteProducListBtn[i].closest('article');
+            let articleDOM = deleteProducListBtn[i].closest("article");
+             //reucp données id
             let itemId = articleDOM.dataset.id;
-            //reucp données
+            //recup donnée color
             let itemColor = articleDOM.dataset.color;
+            //recup quantity 
             let itemQuantity = localStorage.getItem(localStorage.key(i));
+            //table id and color
             let localStorageKey = [itemId, itemColor];
             //delete localstorage itemId , itemColor,itemQuantity
             localStorage.removeItem(localStorageKey, itemQuantity);
+             //delete article Dom
             articleDOM.remove();
-
-            //display html (class ="itemQuantity" )
+            //calculate new data 
             displayNumberTotalPanier();
         });
     }
@@ -88,14 +59,14 @@ const deleteArticleNbr = () => {
  * ?number == 0 message error : send localstorage
  */
 const refreshAndSendTheNumber = () => {
-    let quantitySelector = document.querySelectorAll('.itemQuantity');
+    let quantitySelector = document.querySelectorAll(".itemQuantity");
     for (let i = 0; i < quantitySelector.length; i++) {
         quantitySelector[i].addEventListener('change', (e) => {
             e.preventDefault();
             //return Ancestor value
-            let articleDOM = quantitySelector[i].closest('article');
+            let articleDOM = quantitySelector[i].closest("article");
             //return id data
-            let itemId = articleDOM.dataset.id;;
+            let itemId = articleDOM.dataset.id;
             //return choise color data
             let itemColor = articleDOM.dataset.color;
             //return chooise id and colors localStorage
@@ -109,6 +80,7 @@ const refreshAndSendTheNumber = () => {
             }
             //send in localStorage Key and Number
             localStorage.setItem(localStorageKey, itemQuantity);
+            //calculation new price
             displayNumberTotalPanier();
         });
     }
@@ -116,10 +88,10 @@ const refreshAndSendTheNumber = () => {
 /**
  * return the number of Kanap chosen
  * display html (class ="itemQuantity" ligne 63)
- * return {number}
+ * @return {number}
  */
 const displayNumberTotalPanier = () => {
-    let quantitySelector = document.querySelectorAll('.itemQuantity');
+    let quantitySelector = document.querySelectorAll(".itemQuantity");
     let itemAmount = 0;
     for (let i = 0; i < quantitySelector.length; i++) {
         //return entier
@@ -136,12 +108,12 @@ const displayNumberTotalPanier = () => {
  * Display Total price panier(id='totalPrice ligne 73) when we add several sofas
  */
 const displayTotalPrice = () => {
-    let quantitySelector = document.querySelectorAll('.itemQuantity');
+    let quantitySelector = document.querySelectorAll(".itemQuantity");
     totalCartPrice = 0;
     for (let i = 0; i < quantitySelector.length; i++) {
-        //quantitySelector[i] ={objet}
-        let articleDOM = quantitySelector[i].closest('article');
-        //recup individual price
+        //quantitySelector[i] ={objet} return article html
+        let articleDOM = quantitySelector[i].closest("article");
+        //recup individual price return price of article display
         let individualPrice = articleDOM.dataset.price;
         //multiply quantity * individual Article  transform with parseInt
         totalCartPrice += parseInt(quantitySelector[i].value) * individualPrice;
@@ -158,11 +130,11 @@ const displayTotalPrice = () => {
         //awwait response key
         //productList = key
         let productList = await recupInfoIdProduct(key);
+        //return key color
+        let keyColor = localStorage.key(key).split(',')[1];
         //display and
         idSectionContainercartHtml.innerHTML += `
-		<article class="cart__item" data-id="${productList._id}" data-color="${
-            localStorage.key(key).split(',')[1]
-        }" data-price="${productList.price}">
+		<article class="cart__item" data-id="${productList._id}" data-color="${keyColor}" data-price="${productList.price}">
 			<div class="cart__item__img">
 				<img src="${productList.imageUrl}" alt="${productList.altTxt}">
 			</div>
@@ -170,7 +142,7 @@ const displayTotalPrice = () => {
 				<div class="cart__item__content__titlePrice">
 					<h2>${productList.name}</h2>
 					<p>${productList.price} €</p>
-					<p>Coloris : ${localStorage.key(key).split(',')[1]}</p>
+					<p>Coloris : ${keyColor}</p>
 				</div>
 				<div class="cart__item__content__settings">
 					<div class="cart__item__content__settings__quantity">
@@ -240,7 +212,6 @@ userFormSubmit.addEventListener('click', (e) => {
             });
     }else {
          let title = document.querySelector("#cartAndFormContainer");
-         console.log(title);
          title.innerHTML = `<h2>Oupss: Votre panier est vide ou le formulaire n'est pas correctement rempli.</h2>
                               <h3>(Merci de faire un retour au pannier)</h3>`;
     }

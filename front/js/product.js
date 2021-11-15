@@ -1,4 +1,5 @@
 import {Kanap} from "./Modelkanap.js";
+import {verifIsAGoodUrl} from './function.js';
 const classItem__img = document.querySelector('.item__img');
 const idTittle = document.querySelector('#title');
 const idDescription = document.getElementById('description');
@@ -6,26 +7,6 @@ const idPrice = document.getElementById('price');
 const idColors = document.getElementById('colors'); //choix colors dasn le <select> <option>
 const addToCartBtn = document.getElementById('addToCart'); //btn d'envoi vers cart.html(panier)
 
-
-/**
- *
- * @returns string
- */
-const verifIsAGoodUrl = () => {
-    // page actuel http
-    let url = new URL(window.location.href);
-    //acces aux arguments decodé de la requete get dans l'url
-    let idUrlRecup = new URLSearchParams(url.search);
-    //verif si la clé id est presente avec la methode .has() qui renvoi un boolean
-    //if key = true return returnId else error
-    if (idUrlRecup.has('id')) {
-        let returnId = idUrlRecup.get('id');
-        return returnId;
-    } else {
-        //message d'erreur si soucis d'affichage
-        alert('Cette adresse ne correspond pas a la page demandée');
-    }
-};
 /**
  *  get et verif the response "information product display page"
  */
