@@ -1,55 +1,44 @@
+import {
+    checkIfCartEmpty,
+    idSendConfirm,
+    recupInfoIdProduct,
+} from './function.js';
+import { userInputVerification } from './formulaire.js';
 
-import {checkIfCartEmpty, idSendConfirm} from './function.js';
-import {userInputVerification} from './formulaire.js';
-
-const idSectionContainercartHtml = document.querySelector("#cart__items");
-const userFormSubmit = document.getElementById("order");
-let totalPriceDisplay = document.getElementById("totalPrice");
-const totalQuantityDisplay = document.getElementById("totalQuantity");
+const idSectionContainercartHtml = document.querySelector('#cart__items');
+const userFormSubmit = document.getElementById('order');
+let totalPriceDisplay = document.getElementById('totalPrice');
+const totalQuantityDisplay = document.getElementById('totalQuantity');
 let totalCartPrice = 0;
-/*
+/*récupération
  * return key without color
- * @param {*} key
+ * @param {id} key
  * @returns {object}
  */
-const recupInfoIdProduct = async (key) => {
-    let keyCorlors = localStorage.key(key);
-    //idColorArray return key/color on tab with two element 0 = key 1 ,(.split)= color
-    let idColorArray = keyCorlors.split(',');
-    //recup one value on the table [id]
-    let itemId = idColorArray[0];
-    try {
-        let response = await fetch(
-            `http://localhost:3000/api/products/${itemId}`
-        );
-        return await response.json();
-    } catch (error) {
-        alert('Error : ' + error);
-    }
-};
+recupInfoIdProduct();
 /**
  * delete article panier class="deleteItem" (supprimer) ligne 66 cart.html
  */
 const deleteArticleNbr = () => {
-    let deleteProducListBtn = document.querySelectorAll(".deleteItem");
+    let deleteProducListBtn = document.querySelectorAll('.deleteItem');
     for (let i = 0; i < deleteProducListBtn.length; i++) {
         deleteProducListBtn[i].addEventListener('click', (e) => {
             e.preventDefault();
             //select parent for close
-            let articleDOM = deleteProducListBtn[i].closest("article");
-             //reucp données id
+            let articleDOM = deleteProducListBtn[i].closest('article');
+            //reucp données id
             let itemId = articleDOM.dataset.id;
             //recup donnée color
             let itemColor = articleDOM.dataset.color;
-            //recup quantity 
+            //recup quantity
             let itemQuantity = localStorage.getItem(localStorage.key(i));
             //table id and color
             let localStorageKey = [itemId, itemColor];
             //delete localstorage itemId , itemColor,itemQuantity
             localStorage.removeItem(localStorageKey, itemQuantity);
-             //delete article Dom
+            //delete article Dom
             articleDOM.remove();
-            //calculate new data 
+            //calculate new data
             displayNumberTotalPanier();
         });
     }
@@ -59,12 +48,12 @@ const deleteArticleNbr = () => {
  * ?number == 0 message error : send localstorage
  */
 const refreshAndSendTheNumber = () => {
-    let quantitySelector = document.querySelectorAll(".itemQuantity");
+    let quantitySelector = document.querySelectorAll('.itemQuantity');
     for (let i = 0; i < quantitySelector.length; i++) {
         quantitySelector[i].addEventListener('change', (e) => {
             e.preventDefault();
             //return Ancestor value
-            let articleDOM = quantitySelector[i].closest("article");
+            let articleDOM = quantitySelector[i].closest('article');
             //return id data
             let itemId = articleDOM.dataset.id;
             //return choise color data
@@ -91,7 +80,7 @@ const refreshAndSendTheNumber = () => {
  * @return {number}
  */
 const displayNumberTotalPanier = () => {
-    let quantitySelector = document.querySelectorAll(".itemQuantity");
+    let quantitySelector = document.querySelectorAll('.itemQuantity');
     let itemAmount = 0;
     for (let i = 0; i < quantitySelector.length; i++) {
         //return entier
@@ -108,11 +97,11 @@ const displayNumberTotalPanier = () => {
  * Display Total price panier(id='totalPrice ligne 73) when we add several sofas
  */
 const displayTotalPrice = () => {
-    let quantitySelector = document.querySelectorAll(".itemQuantity");
+    let quantitySelector = document.querySelectorAll('.itemQuantity');
     totalCartPrice = 0;
     for (let i = 0; i < quantitySelector.length; i++) {
         //quantitySelector[i] ={objet} return article html
-        let articleDOM = quantitySelector[i].closest("article");
+        let articleDOM = quantitySelector[i].closest('article');
         //recup individual price return price of article display
         let individualPrice = articleDOM.dataset.price;
         //multiply quantity * individual Article  transform with parseInt
@@ -134,7 +123,9 @@ const displayTotalPrice = () => {
         let keyColor = localStorage.key(key).split(',')[1];
         //display and
         idSectionContainercartHtml.innerHTML += `
-		<article class="cart__item" data-id="${productList._id}" data-color="${keyColor}" data-price="${productList.price}">
+		<article class="cart__item" data-id="${
+            productList._id
+        }" data-color="${keyColor}" data-price="${productList.price}">
 			<div class="cart__item__img">
 				<img src="${productList.imageUrl}" alt="${productList.altTxt}">
 			</div>
@@ -180,7 +171,7 @@ userInputVerification();
 userFormSubmit.addEventListener('click', (e) => {
     e.preventDefault();
     //if input form is true send POST id localstorage
-    if (userInputVerification() && totalCartPrice !== 0 ) {
+    if (userInputVerification() && totalCartPrice !== 0) {
         const products = idSendConfirm();
         const toSend = {
             contact: {
@@ -210,9 +201,9 @@ userFormSubmit.addEventListener('click', (e) => {
             .catch((error) => {
                 alert('Error: ' + error);
             });
-    }else {
-         let title = document.querySelector("#cartAndFormContainer");
-         title.innerHTML = `<h2>Oupss: Votre panier est vide ou le formulaire n'est pas correctement rempli.</h2>
+    } else {
+        let title = document.querySelector('#cartAndFormContainer');
+        title.innerHTML = `<h2>Oupss: Votre panier est vide ou le formulaire n'est pas correctement rempli.</h2>
                               <h3>(Merci de faire un retour au pannier)</h3>`;
     }
 });

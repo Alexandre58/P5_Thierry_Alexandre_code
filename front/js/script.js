@@ -1,7 +1,6 @@
 import {Kanap} from "./Modelkanap.js";
 let urlApiAllkanaps = "http://localhost:3000/api/products";
 const items = document.querySelector("#items");
-
 /**
  * fetch API display all articles
  */

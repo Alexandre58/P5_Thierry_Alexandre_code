@@ -1,31 +1,38 @@
-import {Kanap} from "./Modelkanap.js";
-import {verifIsAGoodUrl} from './function.js';
+import { Kanap } from './Modelkanap.js';
+import { verifIsAGoodUrl } from './function.js';
 const classItem__img = document.querySelector('.item__img');
 const idTittle = document.querySelector('#title');
 const idDescription = document.getElementById('description');
 const idPrice = document.getElementById('price');
+console.log(idPrice);
+console.log(idDescription);
 const idColors = document.getElementById('colors'); //choix colors dasn le <select> <option>
 const addToCartBtn = document.getElementById('addToCart'); //btn d'envoi vers cart.html(panier)
 
 /**
- *  get et verif the response "information product display page"
+ *  get et verif response "information product display page"
  */
 let id = verifIsAGoodUrl();
-fetch(`http://localhost:3000/api/products/${id}`)
-        .then(data => data.json())
-        .then(jsonListArticle => {
-                    let kanapUnity = new Kanap(jsonListArticle)
-                        //Display product.html
-                        classItem__img.innerHTML = `<img src="${kanapUnity.imageUrl}" alt="${kanapUnity.alt}">`;
-                        idTittle.textContent = kanapUnity.name;
-                        idPrice.textContent = kanapUnity.price;
-                        idDescription.textContent = kanapUnity.description;
-                        //display choise colors
-                        kanapUnity.colors.forEach((color) => {
-                            idColors.innerHTML += `<option value="${color}">${color}</option>`;
-                        });                    
-});
-
+const displayKanapUnity = async () => {
+    await fetch(`http://localhost:3000/api/products/${id}`)
+        .then((data) => data.json())
+        .then((jsonListArticle) => {
+            let kanapUnity = new Kanap(jsonListArticle);
+            //Display product.html
+            classItem__img.innerHTML = `<img src="${kanapUnity.imageUrl}" alt="${kanapUnity.alt}">`;
+            idTittle.textContent = kanapUnity.name;
+            idPrice.textContent = kanapUnity.price;
+            idDescription.textContent = kanapUnity.description;
+            //display choise colors
+            kanapUnity.colors.forEach((color) => {
+                idColors.innerHTML += `<option value="${color}">${color}</option>`;
+            });
+        })
+        .catch((error) => {
+            alert('Merci de recherger la page, une erreur est survenue !');
+        });
+};
+displayKanapUnity();
 // Add LocalStorage to card
 addToCartBtn.addEventListener('click', () => {
     const itemId = verifIsAGoodUrl();
@@ -42,6 +49,6 @@ addToCartBtn.addEventListener('click', () => {
         //return localStorage (clé/couleur together + value = quantité)
         localStorage.setItem(itemInCart, itemQuantity);
         //window.location.href return to cart.html(panier)
-        window.location.href = "./cart.html";
+        window.location.href = './cart.html';
     }
 });

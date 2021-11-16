@@ -1,4 +1,4 @@
-import {verifIsAGoodUrl} from './function.js';
+import { verifIsAGoodUrl } from './function.js';
 
 //display (await load and display n°order)
 window.addEventListener('load', () => {

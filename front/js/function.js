@@ -2,7 +2,7 @@
  *Vérification d'url de la page actuel
  * @returns string
  */
- export const verifIsAGoodUrl = () => {
+export const verifIsAGoodUrl = () => {
     // page actuel http
     let url = new URL(window.location.href);
     //acces aux arguments decodé de la requete get dans l'url
@@ -41,3 +41,23 @@ export function idSendConfirm() {
     }
     return idRecupLocalStorage;
 }
+/*
+ * return key without color
+ * @param {*} key
+ * @returns {object}
+ */
+export const recupInfoIdProduct = async (key) => {
+    let keyCorlors = localStorage.key(key);
+    //idColorArray return key/color on tab with two element 0 = key 1 ,(.split)= color
+    let idColorArray = keyCorlors.split(',');
+    //recup one value on the table [id]
+    let itemId = idColorArray[0];
+    try {
+        let response = await fetch(
+            `http://localhost:3000/api/products/${itemId}`
+        );
+        return await response.json();
+    } catch (error) {
+        alert('Error : ' + error);
+    }
+};
