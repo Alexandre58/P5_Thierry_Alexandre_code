@@ -4,13 +4,12 @@ const classItem__img = document.querySelector('.item__img');
 const idTittle = document.querySelector('#title');
 const idDescription = document.getElementById('description');
 const idPrice = document.getElementById('price');
-console.log(idPrice);
-console.log(idDescription);
 const idColors = document.getElementById('colors'); //choix colors dasn le <select> <option>
 const addToCartBtn = document.getElementById('addToCart'); //btn d'envoi vers cart.html(panier)
 
 /**
  *  get et verif response "information product display page"
+ * verifIsGood = recup id in Url 
  */
 let id = verifIsAGoodUrl();
 const displayKanapUnity = async () => {

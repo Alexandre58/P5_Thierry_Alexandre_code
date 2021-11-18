@@ -10,7 +10,7 @@ const items = document.querySelector("#items");
      return await fetch(url)
     .then(data => data.json())
     .catch((error)=>{
-               alert("Merci de recherger la page, une erreur est survenue !");
+               alert("Merci de recharger la page, une erreur est survenue !");
     });  
  };
 

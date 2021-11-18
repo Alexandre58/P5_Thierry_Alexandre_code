@@ -1,7 +1,6 @@
 import {
     checkIfCartEmpty,
-    idSendConfirm,
-    recupInfoIdProduct,
+    idSendConfirm
 } from './function.js';
 import { userInputVerification } from './formulaire.js';
 
@@ -10,12 +9,26 @@ const userFormSubmit = document.getElementById('order');
 let totalPriceDisplay = document.getElementById('totalPrice');
 const totalQuantityDisplay = document.getElementById('totalQuantity');
 let totalCartPrice = 0;
-/*récupération
- * return key without color
- * @param {id} key
+/*
+ * return key without color localstorage
+ * @param {*} key
  * @returns {object}
  */
-recupInfoIdProduct();
+const recupInfoIdProduct = async (key) => {
+    let keyCorlors = localStorage.key(key);
+    //idColorArray return key/color on tab with two element 0 = key 1 ,(.split)= color
+    let idColorArray = keyCorlors.split(',');
+    //recup one value on the table [id]
+    let itemId = idColorArray[0];
+    try {
+        let response = await fetch(
+            `http://localhost:3000/api/products/${itemId}`
+        );
+        return await response.json();
+    } catch (error) {
+        alert('Error : ' + error);
+    }
+};
 /**
  * delete article panier class="deleteItem" (supprimer) ligne 66 cart.html
  */
@@ -109,7 +122,6 @@ const displayTotalPrice = () => {
     }
     totalPriceDisplay.innerHTML = totalCartPrice;
 };
-
 /**
  * display list productList on panier
  */
@@ -165,6 +177,7 @@ const displayTotalPrice = () => {
  */
 userInputVerification();
 /**
+ * send form and recup n° order POST
  * Button Command
  * userFormSubmit = class="order"
  */
@@ -173,6 +186,7 @@ userFormSubmit.addEventListener('click', (e) => {
     //if input form is true send POST id localstorage
     if (userInputVerification() && totalCartPrice !== 0) {
         const products = idSendConfirm();
+        console.log(products);
         const toSend = {
             contact: {
                 firstName: firstName.value,
@@ -195,11 +209,11 @@ userFormSubmit.addEventListener('click', (e) => {
             .then((value) => {
                 //clear the localStorage after command
                 localStorage.clear();
-                //redirection confirm.html
+                //redirection confirm.html with N° order
                 document.location.href = `./confirmation.html?id=${value.orderId}`;
             })
             .catch((error) => {
-                alert('Error: ' + error);
+                alert('Merci de recharger la page : ' + error);
             });
     } else {
         let title = document.querySelector('#cartAndFormContainer');
