@@ -215,9 +215,5 @@ userFormSubmit.addEventListener('click', (e) => {
             .catch((error) => {
                 alert('Merci de recharger la page : ' + error);
             });
-    } else {
-        let title = document.querySelector('#cartAndFormContainer');
-        title.innerHTML = `<h2>Oupss: Votre panier est vide ou le formulaire n'est pas correctement rempli.</h2>
-                              <h3>(Merci de faire un retour au pannier)</h3>`;
-    }
+    } 
 });
