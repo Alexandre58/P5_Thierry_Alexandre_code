@@ -12,7 +12,7 @@ export class Kanap {
         return this.getHtmlRepresentation();
     }
     getHtmlRepresentation() {
-                return  `   <a href="/front/html/product.html?id=${this._id}">
+                return  `   <a href="../html/product.html?id=${this._id}">
                                 <article>
                                 <img src="${this.imageUrl}" alt="${this.altTxt}" width="160" height="160">
                                 <h3 class="productName">${this.name}</h3>
