@@ -32,22 +32,33 @@ const displayKanapUnity = async () => {
         });
 };
 displayKanapUnity();
+
 // Add LocalStorage to card
+
 addToCartBtn.addEventListener('click', () => {
     const itemId = verifIsAGoodUrl();
     const itemColor = document.getElementById('colors').value;
-    const itemQuantity = document.getElementById('quantity').value;
+    const itemQuantity = parseInt(document.getElementById('quantity').value);
     // Confirm color and quantity != 0
     if (itemColor === '') {
         alert('Il est nécessaire de choisir une couleur');
-    } else if (itemQuantity == 0) {
+    } else if (itemQuantity === 0) {
         alert('Il faut au moins ajouter un Kanap');
     } else {
         //table return clé/couleur
         const itemInCart = [itemId, itemColor];
+        //recup localstorage
+        let actualQuantityBrut = localStorage.getItem(itemInCart);
+        //condition
+        let actualQuantity = actualQuantityBrut === null ? 0 : parseInt(actualQuantityBrut);
         //return localStorage (clé/couleur together + value = quantité)
-        localStorage.setItem(itemInCart, itemQuantity);
+      
+        localStorage.setItem(itemInCart, itemQuantity + actualQuantity);
+       
         //window.location.href return to cart.html(panier)
         window.location.href = './cart.html';
     }
 });
+
+
+  

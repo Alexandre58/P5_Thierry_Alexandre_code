@@ -29,6 +29,8 @@ const recupInfoIdProduct = async (key) => {
         alert('Error : ' + error);
     }
 };
+
+
 /**
  * delete article panier class="deleteItem" (supprimer) ligne 66 cart.html
  */
@@ -126,6 +128,7 @@ const displayTotalPrice = () => {
  * display list productList on panier
  */
 (async () => {
+    checkIfCartEmpty();
     //return all commande on panier.html
     for (let key = 0; key < localStorage.length; key++) {
         //awwait response key
